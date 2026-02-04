@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment | CareConnect</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <style>
+        .booking-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: var(--surface-color);
+            padding: 32px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .caregiver-summary {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding-bottom: 24px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .caregiver-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .booking-container {
+                margin: 0;
+                border-radius: 0;
+                height: 100vh;
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="home.html" class="logo">
+                <img src="images/logo.png" alt="Logo">
+                CareConnect
+            </a>
+            <button class="back-button" onclick="history.back()" style="display: none;">Back</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="booking-container">
+            <h2 style="margin-bottom: 4px;">Confirm Booking</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Enter details to schedule your appointment.
+            </p>
+
+            <div class="caregiver-summary" id="caregiver-summary">
+                <!-- Populated by JS -->
+                <div class="caregiver-avatar">Dr</div>
+                <div>
+                    <h3>Selected Caregiver</h3>
+                    <p style="color: var(--text-secondary);">Specialist</p>
+                </div>
+            </div>
+
+            <form id="booking-form">
+                <div class="form-group">
+                    <label>Patient Name</label>
+                    <input type="text" class="input-field" value="Kamal Perera" required>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" class="input-field" required id="date-picker">
+                    </div>
+                    <div class="form-group">
+                        <label>Time</label>
+                        <select class="input-field" required>
+                            <option value="">Select Time</option>
+                            <option value="08:00">08:00 AM - 12:00 PM</option>
+                            <option value="12:00">12:00 PM - 04:00 PM</option>
+                            <option value="16:00">04:00 PM - 08:00 PM</option>
+                            <option value="20:00">08:00 PM - 12:00 AM</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Location</label>
+                    <select class="input-field" required>
+                        <option value="home">Home Visit</option>
+                        <option value="hospital-asiri">Asiri Hospital</option>
+                        <option value="hospital-nawaloka">Nawaloka Hospital</option>
+                        <option value="hospital-lanka">Lanka Hospitals</option>
+                        <option value="hospital-national">National Hospital</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Special Instructions (Optional)</label>
+                    <textarea class="input-field" rows="3"
+                        placeholder="Condition details, specific needs..."></textarea>
+                </div>
+
+                <div
+                    style="background: rgba(13, 148, 136, 0.1); padding: 16px; border-radius: 12px; margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Service Fee</span>
+                        <span>LKR 2,500</span>
+                    </div>
+                    <div
+                        style="display: flex; justify-content: space-between; padding-top: 8px; border-top: 1px solid rgba(0,0,0,0.1); font-weight: 600;">
+                        <span>Total</span>
+                        <span>LKR 2,500</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Confirm Appointment</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        // Set min date to today
+        document.getElementById('date-picker').min = new Date().toISOString().split('T')[0];
+
+        // Retrieve Caregiver Info from URL or LocalStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const caregiverId = urlParams.get('id');
+        // In a real app, fetch details. Mocking display:
+        if (caregiverId) {
+            // Mock logic to update UI
+        }
+
+        document.getElementById('booking-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Mock submission
+            const bookings = JSON.parse(localStorage.getItem('careConnectBookings') || '[]');
+            const newBooking = {
+                id: Date.now(),
+                caregiver: "Caregiver Name", // Would be dynamic
+                date: document.getElementById('date-picker').value,
+                ward: "Home Visit",
+                status: "Pending",
+                patient: "Kamal Perera"
+            };
+            bookings.push(newBooking);
+            localStorage.setItem('careConnectBookings', JSON.stringify(bookings));
+
+            window.location.href = 'booking-confirmation.html';
+        });
+    </script>
+    <button class="back-button" onclick="history.back()" aria-label="Go Back">
+        <img src="images/back-arrow.png" alt="Back">
+    </button>
+</body>
+
+</html>
